@@ -9,15 +9,51 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+<div class="container mt-3 border bg-light">
+    <h1>Git Hub user repositories</h1>
+    <div class="my-3">
+        <label for="user-name" class="form-label">GitHub User Name:</label>
+        <input class="form-control" id="user-name" placeholder="Enter User Name" name="user name">
+        <button id="submitBtn" class="btn btn-primary mt-2">Search</button>
+    </div>
+</div>
 <div class="container bg-light border">
-    <table class="table">
+    <table class="table" id="myTable">
         <thead>
         <tr>
             <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Email</th>
+            <th>Description</th>
+            <th>id</th>
         </tr>
         </thead>
+        <tbody>
+        </tbody>
+    </table>
 </div>
 </body>
+<script>
+    $(document).ready(function(){
+        $('button#submitBtn').click(function() {
+            $.ajax({
+                type: 'GET',
+                url: "https://api.github.com/users/"+$('input#user-name').val()+"/repos",
+                data: { get_param: 'value' },
+                dataType: 'json',
+                success: function (data) {
+                    $.each(data, function(index, element) {
+                        $('#myTable > tbody').append(
+                            '<tr><td>'
+                            + element.name
+                            + '</td><td>'
+                            + element.description +
+                            + '</td><td>' 
+                            + element.id +
+                            '</td></tr>'
+                        );
+                    });
+                }
+            });
+        });
+    });
+</script>
 </html>
